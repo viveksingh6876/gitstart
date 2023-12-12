@@ -30,11 +30,57 @@
 
 ////QUERYSELECTORALL
 
-var oddListItem = document.querySelectorAll("li:nth-child(odd)")
+// var oddListItem = document.querySelectorAll("li:nth-child(odd)")
 
-for(var i = 0; i<oddListItem.length; i++ ){
-    oddListItem[i].style.backgroundColor = "green"
-}
+// for(var i = 0; i<oddListItem.length; i++ ){
+//     oddListItem[i].style.backgroundColor = "green"
+// }
 
-var secondListItem = document.querySelectorAll("li")
-secondListItem[1].style.color = "blue"
+// var secondListItem = document.querySelectorAll("li")
+// secondListItem[1].style.color = "blue"
+
+//parentElement
+var listItem = document.querySelector('#items')
+
+// console.log(listItem.parentElement)
+// console.log(listItem.parentElement.parentElement.parentElement)
+
+//lastElementChild
+//console.log(listItem.lastElementChild)
+
+//lastChild
+//console.log(listItem.lastChild)
+
+//firstElementChild
+//console.log(listItem.firstElementChild.)
+
+//firstChild
+//console.log(listItem.firstChild)
+
+//nextSibling
+//console.log(listItem.nextSibling)
+
+//nextElementSibling
+//console.log(listItem.nextElementSibling)
+
+//previousSibling
+//console.log(listItem.previousSibling)
+
+//previousSibling
+//console.log(listItem.previousElementSibling)
+
+//createElement
+
+var newdiv = document.createElement("div");
+newdiv.className="hello";
+newdiv.id = "hello1";
+newdiv.setAttribute('title', 'hello div')
+
+var textnode = document.createTextNode("New Div Element")
+
+newdiv.appendChild(textnode)
+
+var container = document.querySelector("header .container")
+var h1 = document.querySelector("header h1")
+
+container.insertBefore(newdiv, h1)
