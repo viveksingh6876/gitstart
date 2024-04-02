@@ -1,71 +1,102 @@
 function handleFormSubmit(event) {
     event.preventDefault()
-    console.log(123)
-    var chooseExpensement = document.getElementById("chooseExpensement").value 
-    var chooseDiscription = document.getElementById("chooseDiscription").value 
-    var chooseCategory = document.getElementById("chooseCategory").value 
 
-    const ul = document.getElementById("listItem")
+    const tableNo1 = document.getElementById("tableno1");
+    const tableNo2 = document.getElementById("tableno2");
+    const tableNo3 = document.getElementById("tableno3");
 
-    const li = document.createElement("li")
-    const textnode = document.createTextNode(chooseExpensement+" - "+chooseDiscription+" - "+chooseCategory+"  ")
-    li.appendChild(textnode)
+    const userDetails = {
+        price: event.target.orderCharge.value,
+        item: event.target.orderItem.value,
+        tableNo: event.target.tableno.value
+    }
+    
+    axios.post("https://crudcrud.com/api/c6247db05aa84567a23d7dc77fc98c35/resturentData",
+    userDetails
+    )
+    .then((response) => console.log(response.data))
+    .catch((error) => console.log(error))
+
+    document.getElementById("orderCharge").value = "";
+    document.getElementById("orderItem").value = "";
+    document.getElementById("tableno").value = "";
+    
+    window.addEventListener("DOMContentLoaded", function(e) {
+        axios.get("https://crudcrud.com/api/c6247db05aa84567a23d7dc77fc98c35/resturentData")
+        .then((result) => {
+          for (var i = 0; i< result.data.length; i++) {
+            displayUserOnScreen(result.data[i])
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    })
+    
+    function displayUserOnScreen(userDetails) {
+        const userItem = document.createElement("li");
+        userItem.appendChild(
+          document.createTextNode(
+            `${userDetails.price+" rs"} - ${userDetails.item} - ${userDetails.tableNo}`
+          )
+        );
+        
+        
+
+         const deleteBtn = document.createElement("button");
+         deleteBtn.appendChild(document.createTextNode("Delete"));
+         userItem.appendChild(deleteBtn);
+        
+        
+        deleteBtn.addEventListener("click", function (event) {
+            const userList = event.target.parentElement.parentElement
+            userList.removeChild(event.target.parentElement);
+            
+            axios.delete("https://crudcrud.com/api/c6247db05aa84567a23d7dc77fc98c35/resturentData/660b73751492af03e8f11610")
+            .then((result) => console.log(result))
+            .catch((error) => console.log(error))
+            
+        })
+        
+         
+         const editBtn = document.createElement("button");
+         editBtn.appendChild(document.createTextNode("Edit"));
+         userItem.appendChild(editBtn);
+
+         editBtn.addEventListener("click", function (event) {
+            const userList = event.target.parentElement.parentElement
+            userList.removeChild(event.target.parentElement);
+            
+          axios.put("https://crudcrud.com/api/c6247db05aa84567a23d7dc77fc98c35/resturentData/660b73751492af03e8f11610", {
+            price: 200,
+            item: "Dosa",
+            tableNo: "Table no 3"
+            })
+          .then((result) => console.log(result))
+          .catch((error) => console.log(error))
+      
+            document.getElementById("orderCharge").value = userDetails.orderCharge;
+            document.getElementById("orderItem").value = userDetails.orderItem;
+            document.getElementById("tableno").value = userDetails.tableno;
+          });
+        
+        
+        if (userDetails.tableNo == "Table no 1") {
+            tableNo1.appendChild(userItem);
+        }
+
+        else if (userDetails.tableNo == "Table no 2") {
+            tableNo2.appendChild(userItem);
+        } 
+            
+        else {
+            tableNo3.appendChild(userItem);
+        }
+    }
+}
     
 
-    const obj = {
-        chooseExpensement,
-        chooseDiscription,
-        chooseCategory
-          }
-          localStorage.setItem(obj.chooseExpensement, JSON.stringify(obj))
+    
+    
 
-
-        const button = document.createElement("button")
-        button.classList.add("delete-btn")
-        button.id = "button"
-        const textnode2 = document.createTextNode("delete expense")
-        button.appendChild(textnode2)
-        li.appendChild(button)
-
-        const button2 = document.createElement("button")
-        button2.classList.add("delete-btn2")
-        button2.id = "button2"
-        const textnode3 = document.createTextNode("Edit expense")
-        button2.appendChild(textnode3)
-        li.appendChild(button2)
-
-        ul.appendChild(li)
-
-        
-  
-        var delbutton = document.getElementById("button")
-        delbutton.addEventListener('click', function(e){
-        if(e.target.classList.contains('delete-btn')){
-            var ftd = e.target.parentElement
-            
-            ul.removeChild(ftd)
-            localStorage.removeItem(obj.emailId)
-        }
-        })
-
-        var editbutton = document.getElementById("button2")
-
-        editbutton.addEventListener('click', function(ev){
-        if(ev.target.classList.contains('delete-btn2')){
-            var ftd2 = ev.target.parentElement
-            
-            ul.removeChild(ftd2)
-
-            
-
-            var useredit = document.getElementById("username")
-            var emailedit = document.getElementById("email")
-            var phoneedit = document.getElementById("phone")
-            useredit.textContent = obj.user
-            useredit.textContent = obj.emailId
-            phoneedit.textContent = obj.pass
-
-            localStorage.removeItem(obj.emailId)
-        }
-        })
-}
+    
